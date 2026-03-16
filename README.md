@@ -4,7 +4,7 @@ emoji: 📚
 colorFrom: blue
 colorTo: purple
 sdk: gradio
-sdk_version: "5.0.0"
+sdk_version: "5.20.0"
 app_file: app.py
 pinned: false
 private: true
@@ -12,7 +12,9 @@ private: true
 
 # Adaptive Study Agent
 
-A single-agent self-directed learning system built with LangGraph that ingests documents, quizzes itself, evaluates its own answers, and iterates until mastery.
+An autonomous self-directed learning agent built with **LangGraph** and **Claude (Anthropic)**. Upload any PDF or TXT document — the agent ingests it, generates comprehension questions via RAG, answers them using ChromaDB retrieval, self-evaluates each answer, and loops back to re-study weak areas until a mastery threshold is reached.
+
+Built as a portfolio project demonstrating stateful agentic workflows with LangGraph's conditional branching, RAG pipelines with OpenAI embeddings + ChromaDB, and multi-step reasoning with Claude Sonnet.
 
 ---
 
