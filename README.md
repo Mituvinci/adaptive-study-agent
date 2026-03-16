@@ -12,11 +12,18 @@ private: true
 
 # Adaptive Study Agent
 
-A **LLM self-examination simulation** built with **LangGraph** and **Claude (Anthropic)**. The agent reads any document you provide, then runs a fully autonomous study loop — the LLM generates its own comprehension questions, retrieves context from ChromaDB to answer them, and evaluates its own answers. The user does not answer any questions. The purpose is to **probe where the LLM's understanding of the document breaks down** — which topics it answers confidently versus where it scores low and needs to re-read.
+A **two-model LLM self-examination simulation** built with **LangGraph**, **Claude (Anthropic)**, and **GPT-4o-mini (OpenAI)**. The agent reads any document you provide and runs a fully autonomous study loop — no human answers anything.
 
-The output is a structured session report revealing the LLM's weak areas within your document. This is useful for identifying conceptually dense or underrepresented sections in any text.
+**How the two models collaborate:**
+- **GPT-4o-mini** generates comprehension questions from document chunks (temperature 0.7 — creative) and evaluates the answers against the source material (temperature 0.0 — deterministic)
+- **Claude Sonnet** answers the questions using RAG retrieval from ChromaDB (temperature 0.3 — balanced)
+- **OpenAI text-embedding-3-small** handles document chunking and embedding into ChromaDB only — not used for reasoning
 
-This project can be applied to **any domain** — machine learning papers, medical literature, legal documents, textbooks — anything in PDF or TXT format.
+The purpose is to **probe where Claude's understanding of the document breaks down** — GPT acts as the examiner, Claude as the student. When Claude scores below the mastery threshold, the agent re-reads the weak chunk and tries again.
+
+The output is a structured session report revealing Claude's weak areas within your document — useful for identifying conceptually dense or underrepresented sections in any text.
+
+Applicable to **any domain** — ML papers, medical literature, legal documents, textbooks — anything in PDF or TXT format.
 
 ---
 
@@ -38,15 +45,16 @@ The agent operates as a LangGraph state machine with conditional branching. Afte
 
 ## Tech Stack
 
-| Component        | Technology                    | Purpose                                      |
-|------------------|-------------------------------|----------------------------------------------|
-| Agent framework  | LangGraph                     | Stateful loops with conditional branching     |
-| LLM              | Claude Sonnet 4 (Anthropic)   | Question generation, answering, evaluation    |
-| Embeddings       | OpenAI text-embedding-3-small | Text chunk embeddings                         |
-| Vector store     | ChromaDB (local, embedded)    | No Docker required                            |
-| Document parsing | PyMuPDF (fitz)                | PDF support                                   |
-| UI               | Gradio                        | Web interface and Hugging Face Spaces deploy  |
-| Package manager  | uv                            | Dependency management                         |
+| Component        | Technology                    | Purpose                                              |
+|------------------|-------------------------------|------------------------------------------------------|
+| Agent framework  | LangGraph                     | Stateful loops with conditional branching            |
+| Examiner LLM     | GPT-4o-mini (OpenAI)          | Question generation (0.7) + evaluation (0.0)         |
+| Student LLM      | Claude Sonnet 4 (Anthropic)   | Answering questions via RAG (0.3)                    |
+| Embeddings       | OpenAI text-embedding-3-small | Document chunking and embedding into ChromaDB only   |
+| Vector store     | ChromaDB (local, embedded)    | No Docker required                                   |
+| Document parsing | PyMuPDF (fitz)                | PDF support                                          |
+| UI               | Gradio                        | Web interface and Hugging Face Spaces deploy         |
+| Package manager  | uv                            | Dependency management                                |
 
 ---
 

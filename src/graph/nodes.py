@@ -2,6 +2,7 @@ import random
 import re
 
 from langchain_anthropic import ChatAnthropic
+from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 
 from src.graph.state import StudyState
@@ -45,7 +46,7 @@ def generate_question_node(state: StudyState) -> dict:
     else:
         passage = random.choice(chunks)
 
-    llm = ChatAnthropic(model="claude-sonnet-4-20250514", temperature=0.7)
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
     prompt = QUESTION_PROMPT.format(passage=passage)
     response = llm.invoke([HumanMessage(content=prompt)])
     question = response.content.strip()
@@ -81,7 +82,7 @@ def evaluate_node(state: StudyState) -> dict:
     source_chunks = retrieve_chunks(vectorstore, question, top_k=1)
     source = source_chunks[0] if source_chunks else ""
 
-    llm = ChatAnthropic(model="claude-sonnet-4-20250514", temperature=0.0)
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.0)
     prompt = EVALUATE_PROMPT.format(question=question, answer=answer, source=source)
     response = llm.invoke([HumanMessage(content=prompt)])
     result = response.content.strip()
