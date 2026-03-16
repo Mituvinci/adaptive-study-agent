@@ -28,7 +28,7 @@ The connection is conceptual and motivational. There is no shared infrastructure
 
 The agent operates as a LangGraph state machine with conditional branching. After evaluating each answer, the agent decides whether to re-read weak material, continue to the next question, or finalize the session.
 
-![Adaptive Study Agent Architecture](images/study_agent_langraph.png)
+![Adaptive Study Agent Architecture](https://raw.githubusercontent.com/Mituvinci/adaptive-study-agent/master/images/study_agent_langraph.png)
 
 ---
 
