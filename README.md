@@ -1,3 +1,15 @@
+---
+title: Adaptive Study Agent
+emoji: 📚
+colorFrom: blue
+colorTo: purple
+sdk: gradio
+sdk_version: "4.0.0"
+app_file: app.py
+pinned: false
+private: true
+---
+
 # Adaptive Study Agent
 
 A single-agent self-directed learning system built with LangGraph that ingests documents, quizzes itself, evaluates its own answers, and iterates until mastery.
@@ -16,75 +28,7 @@ The connection is conceptual and motivational. There is no shared infrastructure
 
 The agent operates as a LangGraph state machine with conditional branching. After evaluating each answer, the agent decides whether to re-read weak material, continue to the next question, or finalize the session.
 
-```
-          +-----------------------------+
-          |         START               |
-          |   User provides document    |
-          +--------------+--------------+
-                         |
-                         v
-          +-----------------------------+
-          |         INGEST              |
-          |  Parse document             |
-          |  Chunk into passages        |
-          |  Embed -> ChromaDB          |
-          +--------------+--------------+
-                         |
-                         v
-          +-----------------------------+
-          |       GENERATE QUESTION     |
-          |  Query ChromaDB for a chunk |
-          |  LLM generates question     |
-          |  from retrieved passage     |
-          +--------------+--------------+
-                         |
-                         v
-          +-----------------------------+
-          |          ANSWER             |
-          |  Agent retrieves relevant   |
-          |  chunks from ChromaDB       |
-          |  LLM generates answer       |
-          +--------------+--------------+
-                         |
-                         v
-          +-----------------------------+
-          |          EVALUATE           |
-          |  LLM grades own answer      |
-          |  Score: 0.0 - 1.0           |
-          |  Updates session state      |
-          +--------------+--------------+
-                         |
-               +---------+----------+
-               |   Conditional edge  |
-               |  score < threshold? |
-               +---------+----------+
-                    |           |
-                   YES          NO
-                    |           |
-                    v           v
-          +--------------+  +------------------+
-          |   RE-READ    |  |  enough questions |
-          |  Retrieve +  |  |  answered?        |
-          |  re-study    |  +--------+---------+
-          |  weak chunk  |       YES |    NO
-          +------+-------+           |     |
-                 |                   v     v
-                 |           +----------------+
-                 +---------->|   NEXT QUESTION|
-                             +-------+--------+
-                                     |
-                             (loop back to
-                           GENERATE QUESTION)
-                                     |
-                              mastery reached
-                                     |
-                                     v
-                             +---------------+
-                             |   SUMMARIZE   |
-                             |  Write session|
-                             |  report .md   |
-                             +---------------+
-```
+![Adaptive Study Agent Architecture](images/study_agent_langraph.png)
 
 ---
 
@@ -99,39 +43,6 @@ The agent operates as a LangGraph state machine with conditional branching. Afte
 | Document parsing | PyMuPDF (fitz)                | PDF support                                   |
 | UI               | Gradio                        | Web interface and Hugging Face Spaces deploy  |
 | Package manager  | uv                            | Dependency management                         |
-
----
-
-## Project Structure
-
-```
-adaptive_study_agent/
-├── pyproject.toml
-├── .env
-├── README.md
-├── app.py                          <- Gradio web interface
-├── src/
-│   ├── graph/
-│   │   ├── state.py                <- StudyState TypedDict
-│   │   ├── nodes.py                <- All node functions
-│   │   ├── edges.py                <- Conditional edge logic
-│   │   └── build_graph.py          <- Assembles the StateGraph
-│   ├── tools/
-│   │   ├── ingest.py               <- PDF/text chunking + ChromaDB insert
-│   │   └── retriever.py            <- ChromaDB query wrapper
-│   ├── prompts/
-│   │   ├── question_prompt.py      <- Generate question from passage
-│   │   ├── answer_prompt.py        <- Answer using retrieved context
-│   │   └── evaluate_prompt.py      <- Grade answer 0.0-1.0 with reasoning
-│   └── main.py                     <- CLI entry point
-├── output/
-│   └── session_reports/            <- Markdown report per session
-├── data/
-│   └── documents/                  <- Drop PDFs or .txt files here
-└── tests/
-    ├── test_edges.py
-    └── test_ingest.py
-```
 
 ---
 
