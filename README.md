@@ -12,17 +12,19 @@ private: true
 
 # Adaptive Study Agent
 
-An autonomous self-directed learning agent built with **LangGraph** and **Claude (Anthropic)**. Upload any PDF or TXT document — the agent ingests it, generates comprehension questions via RAG, answers them using ChromaDB retrieval, self-evaluates each answer, and loops back to re-study weak areas until a mastery threshold is reached.
+A **LLM self-examination simulation** built with **LangGraph** and **Claude (Anthropic)**. The agent reads any document you provide, then runs a fully autonomous study loop — the LLM generates its own comprehension questions, retrieves context from ChromaDB to answer them, and evaluates its own answers. The user does not answer any questions. The purpose is to **probe where the LLM's understanding of the document breaks down** — which topics it answers confidently versus where it scores low and needs to re-read.
 
-Built as a portfolio project demonstrating stateful agentic workflows with LangGraph's conditional branching, RAG pipelines with OpenAI embeddings + ChromaDB, and multi-step reasoning with Claude Sonnet.
+The output is a structured session report revealing the LLM's weak areas within your document. This is useful for identifying conceptually dense or underrepresented sections in any text.
+
+This project can be applied to **any domain** — machine learning papers, medical literature, legal documents, textbooks — anything in PDF or TXT format.
 
 ---
 
-## Motivation and Conceptual Link to MOSAIC
+## Research Connection
 
-MOSAIC (a separate research project) tests whether 12 specialist agents sharing a vector database improves rare-condition classification -- collective knowledge at scale. This project is the single-agent version of the same question: can one agent use retrieval to improve its own understanding iteratively? The feedback loop here is what Phase 1C of MOSAIC implements collectively across 12 agents.
+This is a standalone extended example project inspired by ongoing research on multi-agent knowledge systems. The core idea — using retrieval-augmented self-evaluation to surface knowledge gaps — is the single-agent version of a feedback mechanism explored at scale in that research. There is no shared infrastructure or data pipeline between the two.
 
-The connection is conceptual and motivational. There is no shared infrastructure, codebase, or data pipeline between this project and MOSAIC.
+---
 
 ---
 
