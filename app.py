@@ -75,9 +75,11 @@ def run_study_session(file, mastery_threshold, progress=gr.Progress(track_tqdm=F
         yield "Please upload a document first.", ""
         return
 
-    ext = os.path.splitext(file.name)[1]
+    # Gradio 5 returns a filepath string; Gradio 4 returned an object with .name
+    file_path = file if isinstance(file, str) else file.name
+    ext = os.path.splitext(file_path)[1]
     tmp = tempfile.NamedTemporaryFile(delete=False, suffix=ext)
-    shutil.copy2(file.name, tmp.name)
+    shutil.copy2(file_path, tmp.name)
     doc_path = tmp.name
 
     edges.MASTERY_THRESHOLD = mastery_threshold
@@ -168,6 +170,7 @@ with gr.Blocks(title="Adaptive Study Agent") as demo:
             file_input = gr.File(
                 label="Upload Document (PDF or TXT)",
                 file_types=[".pdf", ".txt"],
+                type="filepath",
             )
             threshold_slider = gr.Slider(
                 minimum=0.5,
