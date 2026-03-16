@@ -160,6 +160,6 @@ Score: 0.9
 ## Author
 
 **Halima Akhter**
-PhD Candidate in Computer Science
+PhD Student in Computer Science
 Specialization: ML, Deep Learning, Bioinformatics
 GitHub: [github.com/Mituvinci](https://github.com/Mituvinci)
