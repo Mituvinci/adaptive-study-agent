@@ -1,0 +1,10 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+output/session_reports/*.md
+*.egg-info/
+dist/
+build/
+chroma_data/
