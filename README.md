@@ -41,6 +41,8 @@ The agent operates as a LangGraph state machine with conditional branching. Afte
 
 ![Adaptive Study Agent Architecture](https://raw.githubusercontent.com/Mituvinci/adaptive-study-agent/master/images/study_agent_langraph.png)
 
+![LangGraph Diagram](images/study_agent_graph.png)
+
 ---
 
 ## Tech Stack
